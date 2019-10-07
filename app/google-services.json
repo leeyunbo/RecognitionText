@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "813754481756",
+    "firebase_url": "https://vision-ed812.firebaseio.com",
+    "project_id": "vision-ed812",
+    "storage_bucket": "vision-ed812.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813754481756:android:230c5970bf296ae996fa99",
+        "android_client_info": {
+          "package_name": "com.example.textrecognition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813754481756-8sbshg1c6aip9dc9atd7ee7scg3jug5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS-mdUyHBF7-Jk2GSJYrVF1OajDF6vYi4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813754481756-8sbshg1c6aip9dc9atd7ee7scg3jug5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
