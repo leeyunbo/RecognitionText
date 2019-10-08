@@ -36,8 +36,9 @@ class GoogleVision   {
         ORIENTATIONS.append(Surface.ROTATION_270, 180)
     }
 
-    fun Analyze(bitmap : Bitmap, cameraId : String, activity : Activity, context : Context) {
+    public fun Analyze(bitmap : Bitmap) : String? {
         val image = FirebaseVisionImage.fromBitmap(bitmap)
+        var resultText : String? = null
 
         val options = FirebaseVisionCloudDocumentRecognizerOptions.Builder()
             .setLanguageHints(Arrays.asList("ko","윤복"))
@@ -45,12 +46,19 @@ class GoogleVision   {
         val detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options)
 
         detector.processImage(image)
-            .addOnSuccessListener {  }
-            .addOnFailureListener {  }
+            .addOnSuccessListener { firebaseVisionDocumentText ->
+                resultText = firebaseVisionDocumentText.text
+                Log.i("Analyze result : ",resultText)
+            }
+            .addOnFailureListener { // Task failed
+            }
+
+
+        return resultText
 
 
     }
-
+/*
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Throws(CameraAccessException::class)
     private fun getRotationCompensation(cameraId : String, activity : Activity, context : Context) : Int {
@@ -76,7 +84,7 @@ class GoogleVision   {
             }
         }
         return result
-    }
+    }*/
 
 
 

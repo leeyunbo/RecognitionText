@@ -1,13 +1,15 @@
 package com.example.textrecognition.Contract
 
 import android.graphics.Bitmap
+import com.example.textrecognition.Data.GoogleVision
 
 interface MainContract {
 
     interface View {
         val presenter : MainContract.Presenter
 
-        fun requestResult()
+        fun getBitmapFromCamera()
+        fun requestResult(bitmap : Bitmap)
         fun changeUI(result : String)
 
 
@@ -15,6 +17,7 @@ interface MainContract {
 
     interface Presenter {
         val view : MainContract.View
+        val googleVision : GoogleVision
 
         fun returnResult(bitmap : Bitmap) : String?
 
