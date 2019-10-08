@@ -11,7 +11,6 @@ class MainPresenter : MainContract.Presenter {
     override lateinit var googleVision: GoogleVision
 
     override fun returnResult(bitmap: Bitmap): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 
         var result : String?
 

@@ -2,6 +2,8 @@ package com.example.textrecognition
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.ImageView
@@ -16,6 +18,7 @@ import java.lang.Exception
 class MainActivity : AppCompatActivity(),MainContract.View {
 
     override lateinit var presenter: MainContract.Presenter
+    lateinit var bitmap : Bitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +44,7 @@ class MainActivity : AppCompatActivity(),MainContract.View {
     }
 
     override fun requestResult() { //텍스트 인식 결과 받아오기
-        val bitmap : Bitmap = recognition_image_view.drawable as Bitmap
-        changeUI(presenter.returnResult(bitmap) as String)
+        changeUI(presenter.returnResult(bitmap))
     }
 
     override fun changeUI(result: String) { // 텍스트 인식 결과 UI 변경
@@ -56,6 +58,8 @@ class MainActivity : AppCompatActivity(),MainContract.View {
                 if (requestCode == 1 && !data?.equals(null)) {
                     try {
                         var profileBitmap = data.extras.get("data") as Bitmap
+                        this.bitmap = profileBitmap
+
                         recognition_image_view.setImageBitmap(profileBitmap)
                         recognition_image_view.scaleType = ImageView.ScaleType.FIT_XY
                     } catch (e: Exception) {
