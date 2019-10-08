@@ -9,7 +9,7 @@ interface MainContract {
         val presenter : MainContract.Presenter
 
         fun getBitmapFromCamera()
-        fun requestResult(bitmap : Bitmap)
+        fun requestResult()
         fun changeUI(result : String)
 
 
