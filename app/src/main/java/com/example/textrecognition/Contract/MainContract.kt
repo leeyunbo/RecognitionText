@@ -10,7 +10,7 @@ interface MainContract {
 
         fun getBitmapFromCamera()
         fun requestResult()
-        fun changeUI(result : String)
+        fun changeUI(result : String?)
 
 
     }

@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity(),MainContract.View {
         changeUI(presenter.returnResult(bitmap))
     }
 
-    override fun changeUI(result: String) { // 텍스트 인식 결과 UI 변경
+    override fun changeUI(result: String?) { // 텍스트 인식 결과 UI 변경
         result_text_view.setText(result)
     }
 
