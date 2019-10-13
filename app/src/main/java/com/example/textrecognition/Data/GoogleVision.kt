@@ -15,19 +15,24 @@ import android.util.Log
 import android.util.SparseIntArray
 import android.view.Surface
 import androidx.annotation.RequiresApi
+import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText
 import com.google.firebase.ml.vision.text.FirebaseVisionCloudTextRecognizerOptions
+import com.google.firebase.ml.vision.text.FirebaseVisionText
+import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer
+import java.io.IOException
 import java.io.PrintStream
 import java.util.*
 
 
-class GoogleVision   {
+class GoogleVision  {
 
     private val ORIENTATIONS = SparseIntArray()
+    private val detector : FirebaseVisionTextRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
 
     init {
         ORIENTATIONS.append(Surface.ROTATION_0,90)
@@ -37,28 +42,35 @@ class GoogleVision   {
     }
 
     public fun Analyze(bitmap : Bitmap) : String? {
-        val image = FirebaseVisionImage.fromBitmap(bitmap)
-        var resultText : String? = null
-
-        val options = FirebaseVisionCloudDocumentRecognizerOptions.Builder()
-            .setLanguageHints(Arrays.asList("ko","윤복"))
-            .build()
-        val detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options)
-
-        detector.processImage(image)
-            .addOnSuccessListener { firebaseVisionDocumentText ->
-                resultText = firebaseVisionDocumentText.text
-                Log.i("Analyze result : ",resultText)
-            }
-            .addOnFailureListener { // Task failed
-            }
-
-
-        return resultText
-
 
     }
-/*
+
+    fun stop() {
+        try {
+            detector.close()
+        } catch (e : IOException) {
+
+            Log.e(TAG, "Exception thrown while trying to close Text Detector : $e")
+
+        }
+    }
+
+    fun detectInImage(image : FirebaseVisionImage) : Task<FirebaseVisionText> {
+        return detector.processImage(image)
+    }
+
+    fun onSuccess(originalCameraImage : Bitmap?, results : FirebaseVisionText) {
+        val blocks = results.textBlocks
+        for (i in blocks.indices) {
+            val lines  = blocks[i].lines
+            for (j in lines.indices) {
+                val elements = lines[j].elements
+                for (k in elements.indices) {
+                }
+            }
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Throws(CameraAccessException::class)
     private fun getRotationCompensation(cameraId : String, activity : Activity, context : Context) : Int {
@@ -84,7 +96,7 @@ class GoogleVision   {
             }
         }
         return result
-    }*/
+    }
 
 
 
