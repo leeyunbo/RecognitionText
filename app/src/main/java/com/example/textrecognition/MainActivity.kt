@@ -62,9 +62,16 @@ class MainActivity : AppCompatActivity(),MainContract.View {
     override fun onActivityResult(requestCode : Int, resultCode : Int, @Nullable data : Intent?){
         super.onActivityResult(requestCode, resultCode, data)
 
-        when(requestCode) {
+        if(resultCode != 0) {
+            when (requestCode) {
+                1 -> {
+                    var profileBitmap = data?.extras?.get("data") as Bitmap
 
 
+
+                }
+
+            }
         }
         if(resultCode != 0) {
             if(data != null) {
