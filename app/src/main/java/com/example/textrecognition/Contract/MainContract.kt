@@ -11,6 +11,7 @@ interface MainContract {
         fun getBitmapFromCamera()
         fun requestResult()
         fun changeUI(result : String?)
+        fun rotateImage(bitmap : Bitmap, angle : Float) : Bitmap
 
 
     }

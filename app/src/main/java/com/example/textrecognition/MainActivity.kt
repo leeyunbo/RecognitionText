@@ -3,6 +3,7 @@ package com.example.textrecognition
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
@@ -13,6 +14,7 @@ import com.example.textrecognition.Contract.MainContract
 import com.example.textrecognition.Data.GoogleVision
 import com.example.textrecognition.Presenter.MainPresenter
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity(),MainContract.View {
@@ -51,8 +53,19 @@ class MainActivity : AppCompatActivity(),MainContract.View {
         result_text_view.setText(result)
     }
 
+    override fun rotateImage(bitmap: Bitmap, angle: Float) : Bitmap {
+        lateinit var matrix : Matrix
+        matrix.postRotate(angle)
+        return Bitmap.createBitmap(bitmap,0,0,bitmap.width,bitmap.height,matrix,true)
+    }
+
     override fun onActivityResult(requestCode : Int, resultCode : Int, @Nullable data : Intent?){
         super.onActivityResult(requestCode, resultCode, data)
+
+        when(requestCode) {
+
+
+        }
         if(resultCode != 0) {
             if(data != null) {
                 if (requestCode == 1 && !data?.equals(null)) {

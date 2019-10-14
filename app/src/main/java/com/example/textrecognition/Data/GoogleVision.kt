@@ -32,7 +32,6 @@ import java.util.*
 class GoogleVision  {
 
     private val ORIENTATIONS = SparseIntArray()
-    private val detector : FirebaseVisionTextRecognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
 
     init {
         ORIENTATIONS.append(Surface.ROTATION_0,90)
@@ -41,62 +40,44 @@ class GoogleVision  {
         ORIENTATIONS.append(Surface.ROTATION_270, 180)
     }
 
-    public fun Analyze(bitmap : Bitmap) : String? {
+    public fun Analyze(bitmap : Bitmap) : String {
+        Bitmap.createScaledBitmap(bitmap,720,1280,true)
+        lateinit var text : String
+        val image = FirebaseVisionImage.fromBitmap(bitmap)
 
-    }
+        val options = FirebaseVisionCloudDocumentRecognizerOptions.Builder()
+            .setLanguageHints(Arrays.asList("ko","hi"))
+            .build()
+        val detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options)
 
-    fun stop() {
-        try {
-            detector.close()
-        } catch (e : IOException) {
-
-            Log.e(TAG, "Exception thrown while trying to close Text Detector : $e")
-
-        }
-    }
-
-    fun detectInImage(image : FirebaseVisionImage) : Task<FirebaseVisionText> {
-        return detector.processImage(image)
-    }
-
-    fun onSuccess(originalCameraImage : Bitmap?, results : FirebaseVisionText) {
-        val blocks = results.textBlocks
-        for (i in blocks.indices) {
-            val lines  = blocks[i].lines
-            for (j in lines.indices) {
-                val elements = lines[j].elements
-                for (k in elements.indices) {
-                }
+        val result = detector.processImage(image)
+            .addOnSuccessListener { firebaseVisionDocumentText ->
+                text = onSuccess(bitmap,firebaseVisionDocumentText)
             }
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    @Throws(CameraAccessException::class)
-    private fun getRotationCompensation(cameraId : String, activity : Activity, context : Context) : Int {
-
-        val deviceRotation = activity.windowManager.defaultDisplay.rotation
-        var rotationCompensation = ORIENTATIONS.get(deviceRotation)
-
-        val cameraManager = context.getSystemService(CAMERA_SERVICE) as CameraManager
-        val sensorOrientation = cameraManager
-            .getCameraCharacteristics(cameraId)
-            .get(CameraCharacteristics.SENSOR_ORIENTATION)!!
-        rotationCompensation = (rotationCompensation + sensorOrientation + 270) % 360
-
-        val result : Int
-        when (rotationCompensation) {
-            0 -> result = FirebaseVisionImageMetadata.ROTATION_0
-            90 -> result = FirebaseVisionImageMetadata.ROTATION_90
-            180 -> result = FirebaseVisionImageMetadata.ROTATION_180
-            270 -> result = FirebaseVisionImageMetadata.ROTATION_270
-            else -> {
-                result = FirebaseVisionImageMetadata.ROTATION_0
-                Log.e(TAG, "Bad rotation value : $rotationCompensation")
+            .addOnFailureListener {
+                Log.e("LOG : ","addOnFailureListener")
             }
+
+
+        if(result == null) {
+            return "error message"
         }
-        return result
+
+        return text
+
+
+
+
     }
+
+
+    fun onSuccess(originalCameraImage : Bitmap?, results : FirebaseVisionDocumentText) : String{
+
+        return results.text
+
+    }
+
+
 
 
 
