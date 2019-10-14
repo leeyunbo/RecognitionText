@@ -29,60 +29,59 @@ import java.io.PrintStream
 import java.util.*
 
 
-class GoogleVision  {
+class GoogleVision {
 
     private val ORIENTATIONS = SparseIntArray()
 
     init {
-        ORIENTATIONS.append(Surface.ROTATION_0,90)
-        ORIENTATIONS.append(Surface.ROTATION_90,0)
-        ORIENTATIONS.append(Surface.ROTATION_180,270)
+        ORIENTATIONS.append(Surface.ROTATION_0, 90)
+        ORIENTATIONS.append(Surface.ROTATION_90, 0)
+        ORIENTATIONS.append(Surface.ROTATION_180, 270)
         ORIENTATIONS.append(Surface.ROTATION_270, 180)
     }
 
-    public fun Analyze(bitmap : Bitmap) : String {
-        Bitmap.createScaledBitmap(bitmap,720,1280,true)
-        lateinit var text : String
+    public fun Analyze(bitmap: Bitmap): String? {
+        Bitmap.createScaledBitmap(bitmap, 720, 1280, true)
+        var text: String? = null
         val image = FirebaseVisionImage.fromBitmap(bitmap)
 
         val options = FirebaseVisionCloudDocumentRecognizerOptions.Builder()
-            .setLanguageHints(Arrays.asList("ko","hi"))
+            .setLanguageHints(Arrays.asList("ko", "hi"))
             .build()
         val detector = FirebaseVision.getInstance().getCloudDocumentTextRecognizer(options)
 
         val result = detector.processImage(image)
             .addOnSuccessListener { firebaseVisionDocumentText ->
-                text = onSuccess(bitmap,firebaseVisionDocumentText)
+                text = onSuccess(bitmap, firebaseVisionDocumentText)
             }
             .addOnFailureListener {
-                Log.e("LOG : ","addOnFailureListener")
+                Log.e("LOG : ", "addOnFailureListener")
             }
 
 
-        if(result == null) {
-            return "error message"
+        if (text == null) {
+            return "분석에 실패하였습니다."
         }
 
         return text
 
 
-
-
     }
 
 
-    fun onSuccess(originalCameraImage : Bitmap?, results : FirebaseVisionDocumentText) : String{
+    fun onSuccess(originalCameraImage: Bitmap?, result: FirebaseVisionDocumentText): String? {
+        val resultText = result.text
+        val results = mutableListOf("")
+        for (block in result.blocks) {
+            val blockText = block.text
+            results.add(blockText)
+        }
 
-        return results.text
+        println(results.joinToString())
 
+
+        return results.joinToString()
     }
-
-
-
-
-
-
-
-
-
 }
+
+

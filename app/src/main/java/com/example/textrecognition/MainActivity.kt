@@ -1,5 +1,6 @@
 package com.example.textrecognition
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -7,6 +8,7 @@ import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.ImageView
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
@@ -63,17 +65,6 @@ class MainActivity : AppCompatActivity(),MainContract.View {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(resultCode != 0) {
-            when (requestCode) {
-                1 -> {
-                    var profileBitmap = data?.extras?.get("data") as Bitmap
-
-
-
-                }
-
-            }
-        }
-        if(resultCode != 0) {
             if(data != null) {
                 if (requestCode == 1 && !data?.equals(null)) {
                     try {
@@ -81,6 +72,11 @@ class MainActivity : AppCompatActivity(),MainContract.View {
                         this.bitmap = profileBitmap
 
                         recognition_image_view.setImageBitmap(profileBitmap)
+                        val currentDegree = recognition_image_view.rotation
+                        ObjectAnimator.ofFloat(recognition_image_view, View.ROTATION, currentDegree,currentDegree + 90f)
+                            .setDuration(300)
+                            .start()
+
                         recognition_image_view.scaleType = ImageView.ScaleType.FIT_XY
                     } catch (e: Exception) {
                         return
