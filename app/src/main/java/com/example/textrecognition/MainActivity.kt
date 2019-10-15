@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(),MainContract.View {
     }
 
     override fun requestResult() { //텍스트 인식 결과 받아오기
-        changeUI(presenter.returnResult(bitmap))
+        presenter.returnResult(bitmap)
     }
 
     override fun changeUI(result: String?) { // 텍스트 인식 결과 UI 변경

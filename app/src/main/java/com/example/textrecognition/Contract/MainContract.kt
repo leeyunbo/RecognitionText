@@ -19,8 +19,8 @@ interface MainContract {
     interface Presenter {
         val view : MainContract.View
         val googleVision : GoogleVision
-
-        fun returnResult(bitmap : Bitmap) : String?
+        fun returnResult(bitmap : Bitmap)
+        fun returnResultToView(result : String?)
 
     }
 

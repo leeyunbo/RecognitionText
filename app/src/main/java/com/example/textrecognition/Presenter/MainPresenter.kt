@@ -10,12 +10,13 @@ class MainPresenter : MainContract.Presenter {
     override lateinit var view: MainContract.View
     override lateinit var googleVision: GoogleVision
 
-    override fun returnResult(bitmap: Bitmap): String? {
-
+    override fun returnResult(bitmap: Bitmap) {
         var result : String?
 
-        result = googleVision.Analyze(bitmap)
+        googleVision.Analyze(bitmap,this)
+    }
 
-        return result
+    override fun returnResultToView(result : String?) {
+        view.changeUI(result)
     }
 }

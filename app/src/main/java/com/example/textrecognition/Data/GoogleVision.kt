@@ -15,6 +15,7 @@ import android.util.Log
 import android.util.SparseIntArray
 import android.view.Surface
 import androidx.annotation.RequiresApi
+import com.example.textrecognition.Contract.MainContract
 import com.google.android.gms.tasks.Task
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -40,7 +41,7 @@ class GoogleVision {
         ORIENTATIONS.append(Surface.ROTATION_270, 180)
     }
 
-    public fun Analyze(bitmap: Bitmap): String? {
+    public fun Analyze(bitmap: Bitmap,presenter : MainContract.Presenter){
         Bitmap.createScaledBitmap(bitmap, 720, 1280, true)
         var text: String? = null
         val image = FirebaseVisionImage.fromBitmap(bitmap)
@@ -53,23 +54,15 @@ class GoogleVision {
         val result = detector.processImage(image)
             .addOnSuccessListener { firebaseVisionDocumentText ->
                 text = onSuccess(bitmap, firebaseVisionDocumentText)
+                presenter.returnResultToView(text)
             }
             .addOnFailureListener {
                 Log.e("LOG : ", "addOnFailureListener")
             }
 
-
-        if (text == null) {
-            return "분석에 실패하였습니다."
-        }
-
-        return text
-
-
     }
 
-
-    fun onSuccess(originalCameraImage: Bitmap?, result: FirebaseVisionDocumentText): String? {
+    fun onSuccess(originalCameraImage: Bitmap?, result: FirebaseVisionDocumentText) : String? {
         val resultText = result.text
         val results = mutableListOf("")
         for (block in result.blocks) {
@@ -81,6 +74,8 @@ class GoogleVision {
 
 
         return results.joinToString()
+
+
     }
 }
 
